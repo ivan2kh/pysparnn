@@ -60,6 +60,24 @@ class PysparnnTest(unittest.TestCase):
                                    return_distance=False)
         self.assertEqual([[d] for d in data], ret)
 
+    def test_euclidian(self):
+        """Do a quick basic test for index/search functionality"""
+        data = [
+            'hello world',
+            'oh hello there',
+            'Play it',
+            'Play it again Sam',
+        ]
+
+        features = [dict([(x, 1) for x in f.split()]) for f in data]
+        features = DictVectorizer().fit_transform(features)
+
+        cluster_index = ci.ClusterIndex(features, data, distance_type=SlowEuclideanDistance)
+
+        ret = cluster_index.search(features, k=1, k_clusters=1,
+                                   return_distance=False)
+        self.assertEqual([[d] for d in data], ret)
+
     def test_dense_array(self):
         """Do a quick basic test for index/search functionality"""
         data = [

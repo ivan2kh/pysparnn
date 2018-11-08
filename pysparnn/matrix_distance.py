@@ -13,6 +13,7 @@ import abc as _abc
 import numpy as _np
 import scipy.sparse as _sparse
 import scipy.spatial.distance as _spatial_distance
+from sklearn.metrics import pairwise_distances
 
 
 class MatrixMetricSearch(object):
@@ -268,7 +269,7 @@ class SlowEuclideanDistance(MatrixMetricSearch):
         Returns:
             The transformed matrix.
         """
-        return _np.array(features, ndmin=2)
+        return _sparse.csr_matrix(features)
 
     @staticmethod
     def vstack(matrix_list):
@@ -286,7 +287,7 @@ class SlowEuclideanDistance(MatrixMetricSearch):
     def _distance(self, a_matrix):
         """Euclidean distance"""
 
-        return _spatial_distance.cdist(a_matrix, self.matrix, 'euclidean')
+        return pairwise_distances(X=a_matrix, Y=self.matrix, metric='euclidean')
 
 
 class DenseCosineDistance(MatrixMetricSearch):
