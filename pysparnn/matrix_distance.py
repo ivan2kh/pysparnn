@@ -289,6 +289,42 @@ class SlowEuclideanDistance(MatrixMetricSearch):
 
         return pairwise_distances(X=a_matrix, Y=self.matrix, metric='euclidean')
 
+class ManhattanDistance(MatrixMetricSearch):
+    """A matrix that implements euclidean distance search against it.
+    WARNING: This is not optimized.
+    """
+
+    def __init__(self, features, records_data):
+        super(ManhattanDistance, self).__init__(features, records_data)
+        self.matrix = self.matrix
+
+    @staticmethod
+    def features_to_matrix(features):
+        """
+        Args:
+            val: A list of features to be formatted.
+        Returns:
+            The transformed matrix.
+        """
+        return _sparse.csr_matrix(features)
+
+    @staticmethod
+    def vstack(matrix_list):
+        """
+        Args:
+            val: A list of features to be formatted.
+        Returns:
+            The transformed matrix.
+        """
+        return _sparse.vstack(matrix_list)
+
+    def _transform_value(self, v):
+        return v
+
+    def _distance(self, a_matrix):
+        """Euclidean distance"""
+
+        return pairwise_distances(X=a_matrix, Y=self.matrix, metric='manhattan')
 
 class DenseCosineDistance(MatrixMetricSearch):
     """A matrix that implements cosine distance search against it.

@@ -13,6 +13,7 @@ from scipy.sparse import csr_matrix
 from pysparnn.matrix_distance import SlowEuclideanDistance
 from pysparnn.matrix_distance import UnitCosineDistance
 from pysparnn.matrix_distance import DenseCosineDistance
+from pysparnn.matrix_distance import ManhattanDistance
 from sklearn.feature_extraction import DictVectorizer
 
 class PysparnnTest(unittest.TestCase):
@@ -127,6 +128,22 @@ class PysparnnTest(unittest.TestCase):
         # matrix size smaller - this forces the index to have multiple levels
         cluster_index = ci.ClusterIndex(features, data_to_return,
                                         matrix_size=10)
+
+        ret =  cluster_index.search(features[0:10], k=1, k_clusters=1,
+                                    return_distance=False)
+        self.assertEqual([[x] for x in data_to_return[:10]], ret)
+
+    def test_levels_manhattan(self):
+        """Test multiple level indexes"""
+        features = np.random.binomial(1, 0.01, size=(1000, 20000))
+        features = csr_matrix(features)
+
+        # build the search index!
+        data_to_return = np.array(list(range(1000)), dtype=int)
+
+        # matrix size smaller - this forces the index to have multiple levels
+        cluster_index = ci.ClusterIndex(features, data_to_return,
+                                        matrix_size=10, distance_type=ManhattanDistance)
 
         ret =  cluster_index.search(features[0:10], k=1, k_clusters=1,
                                     return_distance=False)
