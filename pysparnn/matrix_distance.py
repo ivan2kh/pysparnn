@@ -279,7 +279,7 @@ class SlowEuclideanDistance(MatrixMetricSearch):
         Returns:
             The transformed matrix.
         """
-        return _np.vstack(matrix_list)
+        return _sparse.vstack(matrix_list)
 
     def _transform_value(self, v):
         return v
